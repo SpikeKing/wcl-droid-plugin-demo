@@ -1,0 +1,3 @@
+[submodule "DroidPlugin"]
+	path = DroidPlugin
+	url = https://github.com/SpikeKing/DroidPlugin.git
