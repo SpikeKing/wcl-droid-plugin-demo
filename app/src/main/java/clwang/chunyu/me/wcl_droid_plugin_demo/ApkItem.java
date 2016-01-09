@@ -10,16 +10,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public class ApkItem {
-    Drawable icon;
-    CharSequence title;
-    String versionName;
-    int versionCode;
-    String apkfile;
-    PackageInfo packageInfo;
+    public Drawable icon; // 图标
+    public CharSequence title; // 标题
+    public String versionName;
+    public int versionCode;
+    public String apkfile;
+    public PackageInfo packageInfo;
 
     boolean installing = false;
 
-    ApkItem(Context context, PackageInfo info, String path) {
+    public ApkItem(Context context, PackageInfo info, String path) {
         PackageManager pm = context.getPackageManager();
         Resources resources = null;
         try {

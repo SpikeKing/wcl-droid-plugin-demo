@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import clwang.chunyu.me.wcl_droid_plugin_demo.store.StoreApkFragment;
+
 /**
  * ViewPager的适配器
  * <p/>
@@ -24,7 +26,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return new InstalledFragment(); // 已安装页
         } else {
-            return new ApkFragment(); // 想要安装页
+            return new StoreApkFragment(); // 想要安装页
         }
     }
 

@@ -43,13 +43,13 @@ public class InstalledFragment extends ListFragment implements ServiceConnection
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         ApkItem item = adapter.getItem(position);
-        if (v.getId() == R.id.button2) {
+        if (v.getId() == R.id.apk_item_b_install) {
 
             PackageManager pm = getActivity().getPackageManager();
             Intent intent = pm.getLaunchIntentForPackage(item.packageInfo.packageName);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        } else if (v.getId() == R.id.button3) {
+        } else if (v.getId() == R.id.apk_item_b_uninstall) {
             doUninstall(item);
         }
     }
@@ -129,16 +129,16 @@ public class InstalledFragment extends ListFragment implements ServiceConnection
                 }
                 ApkItem item = getItem(position);
 
-                ImageView icon = (ImageView) convertView.findViewById(R.id.imageView);
+                ImageView icon = (ImageView) convertView.findViewById(R.id.apk_item_iv_icon);
                 icon.setImageDrawable(item.icon);
 
-                TextView title = (TextView) convertView.findViewById(R.id.textView1);
+                TextView title = (TextView) convertView.findViewById(R.id.apk_item_tv_title);
                 title.setText(item.title);
 
-                final TextView version = (TextView) convertView.findViewById(R.id.textView2);
+                final TextView version = (TextView) convertView.findViewById(R.id.apk_item_tv_version);
                 version.setText(String.format("%s(%s)", item.versionName, item.versionCode));
 
-                TextView btn = (TextView) convertView.findViewById(R.id.button2);
+                TextView btn = (TextView) convertView.findViewById(R.id.apk_item_b_install);
                 btn.setText("打开");
                 btn.setOnClickListener(new OnClickListener() {
 
@@ -148,7 +148,7 @@ public class InstalledFragment extends ListFragment implements ServiceConnection
                     }
                 });
 
-                btn = (TextView) convertView.findViewById(R.id.button3);
+                btn = (TextView) convertView.findViewById(R.id.apk_item_b_uninstall);
                 btn.setText("卸载");
                 btn.setOnClickListener(new OnClickListener() {
 

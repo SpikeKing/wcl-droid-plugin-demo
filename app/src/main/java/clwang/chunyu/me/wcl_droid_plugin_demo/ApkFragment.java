@@ -36,9 +36,6 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
     private ArrayAdapter<ApkItem> adapter;
     final Handler handler = new Handler();
 
-    public ApkFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +48,16 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                 }
                 ApkItem item = getItem(position);
 
-                ImageView icon = (ImageView) convertView.findViewById(R.id.imageView);
+                ImageView icon = (ImageView) convertView.findViewById(R.id.apk_item_iv_icon);
                 icon.setImageDrawable(item.icon);
 
-                TextView title = (TextView) convertView.findViewById(R.id.textView1);
+                TextView title = (TextView) convertView.findViewById(R.id.apk_item_tv_title);
                 title.setText(item.title);
 
-                TextView version = (TextView) convertView.findViewById(R.id.textView2);
+                TextView version = (TextView) convertView.findViewById(R.id.apk_item_tv_version);
                 version.setText(String.format("%s(%s)", item.versionName, item.versionCode));
 
-                TextView btn3 = (TextView) convertView.findViewById(R.id.button3);
+                TextView btn3 = (TextView) convertView.findViewById(R.id.apk_item_b_uninstall);
                 btn3.setText("删除");
                 btn3.setOnClickListener(new OnClickListener() {
 
@@ -69,7 +66,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                         onListItemClick(getListView(), view, position, getItemId(position));
                     }
                 });
-                TextView btn = (TextView) convertView.findViewById(R.id.button2);
+                TextView btn = (TextView) convertView.findViewById(R.id.apk_item_b_install);
                 try {
                     if (item.installing) {
                         btn.setText("安装中ing");
@@ -202,7 +199,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         final ApkItem item = adapter.getItem(position);
-        if (v.getId() == R.id.button2) {
+        if (v.getId() == R.id.apk_item_b_install) {
             if (item.installing) {
                 return;
             }
@@ -230,7 +227,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                 }
                 adapter.remove(item);
             }
-        } else if (v.getId() == R.id.button3) {
+        } else if (v.getId() == R.id.apk_item_b_uninstall) {
             doUninstall(item);
         }
     }
