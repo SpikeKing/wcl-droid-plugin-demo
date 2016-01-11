@@ -51,6 +51,7 @@ public class StoreApkFragment extends Fragment {
         startLoad();
     }
 
+    // 开始加载
     private void startLoad() {
         new Thread("ApkScanner") {
             @Override
