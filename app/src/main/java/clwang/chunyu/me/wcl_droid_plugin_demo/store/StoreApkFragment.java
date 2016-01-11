@@ -24,6 +24,7 @@ import clwang.chunyu.me.wcl_droid_plugin_demo.R;
 
 /**
  * 本地Apk的页面
+ * <p/>
  * Created by wangchenlong on 16/1/8.
  */
 public class StoreApkFragment extends Fragment {
@@ -31,7 +32,7 @@ public class StoreApkFragment extends Fragment {
     @Bind(R.id.list_rv_recycler) RecyclerView mRvRecycler;
 
     final Handler handler = new Handler();
-    private StoreAdapter mStoreAdapter;
+    private StoreAdapter mStoreAdapter; // 适配器
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
