@@ -43,16 +43,15 @@
 
     <Button
         android:id="@+id/apk_item_b_install"
-        android:layout_width="80dp"
+        android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:gravity="center"
         tools:text="安装"/>
 
-
     <Button
         android:id="@+id/apk_item_b_uninstall"
-        android:layout_width="80dp"
+        android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:gravity="center"

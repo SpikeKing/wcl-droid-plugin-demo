@@ -4,7 +4,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,7 +28,6 @@ public class StoreApkFragment extends Fragment {
 
     @Bind(R.id.list_rv_recycler) RecyclerView mRvRecycler;
 
-    final Handler handler = new Handler();
     private StoreAdapter mStoreAdapter; // 适配器
 
     @Nullable @Override
@@ -57,49 +53,20 @@ public class StoreApkFragment extends Fragment {
         new Thread("ApkScanner") {
             @Override
             public void run() {
-//                File file = Environment.getExternalStorageDirectory();
                 File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-                List<File> apks = new ArrayList<File>(10);
+                PackageManager pm = getActivity().getPackageManager();
                 for (File apk : file.listFiles()) {
                     if (apk.exists() && apk.getPath().toLowerCase().endsWith(".apk")) {
-                        apks.add(apk);
-                    }
-                }
-
-                file = new File(Environment.getExternalStorageDirectory(), "360Download");
-                if (file.exists() && file.isDirectory()) {
-                    for (File apk : file.listFiles()) {
-                        if (apk.exists() && apk.getPath().toLowerCase().endsWith(".apk")) {
-                            apks.add(apk);
-                        }
-                    }
-                }
-                PackageManager pm = getActivity().getPackageManager();
-                for (final File apk : apks) {
-                    try {
-                        if (apk.exists() && apk.getPath().toLowerCase().endsWith(".apk")) {
-                            final PackageInfo info = pm.getPackageArchiveInfo(apk.getPath(), 0);
-                            if (info != null) {
-                                try {
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mStoreAdapter.addApkItems(new ApkItem(getActivity(), info, apk.getPath()));
-                                        }
-                                    });
-                                } catch (Exception e) {
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
+                        final PackageInfo info = pm.getPackageArchiveInfo(apk.getPath(), 0);
+                        mStoreAdapter.addApkItems(new ApkItem(getActivity(), info, apk.getPath()));
                     }
                 }
             }
         }.start();
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }

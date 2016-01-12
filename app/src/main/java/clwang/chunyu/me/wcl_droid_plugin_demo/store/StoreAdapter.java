@@ -28,10 +28,6 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
         mApkItems = new ArrayList<>();
     }
 
-    public void setApkItems(ArrayList<ApkItem> apkItems) {
-        mApkItems = apkItems;
-    }
-
     public void addApkItems(ApkItem apkItem) {
         mApkItems.add(apkItem);
         notifyItemInserted(mApkItems.size() + 1);
@@ -39,12 +35,12 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 
     @Override
     public StoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.apk_item, parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.apk_item, parent, false);
         return new StoreViewHolder(view);
     }
 
     @Override public void onBindViewHolder(StoreViewHolder holder, int position) {
-
+        holder.bindTo(mApkItems.get(position));
     }
 
     @Override public int getItemCount() {
