@@ -47,7 +47,7 @@ public class ApkItem {
         packageInfo = info;
     }
 
-    ApkItem(PackageManager pm, PackageInfo info, String path) {
+    public ApkItem(PackageManager pm, PackageInfo info, String path) {
         try {
             icon = pm.getApplicationIcon(info.applicationInfo);
         } catch (Exception e) {

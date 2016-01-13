@@ -1,7 +1,8 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo.store;
+package clwang.chunyu.me.wcl_droid_plugin_demo.start;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +14,16 @@ import clwang.chunyu.me.wcl_droid_plugin_demo.R;
 import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItemViewHolder;
 
 /**
- * 本地Apk的适配器
+ * 启动的适配器
  * <p>
- * Created by wangchenlong on 16/1/8.
+ * Created by wangchenlong on 16/1/13.
  */
-public class StoreAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
+public class StartAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
 
     private ArrayList<ApkItem> mApkItems;
     private Activity mActivity;
 
-    public StoreAdapter(Activity activity) {
+    public StartAdapter(Activity activity) {
         mActivity = activity;
         mApkItems = new ArrayList<>();
     }
@@ -42,8 +43,15 @@ public class StoreAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
         notifyDataSetChanged();
     }
 
-    @Override
-    public ApkItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ApkItem getApkItem(int index) {
+        return mApkItems.get(index);
+    }
+
+    public int getCount() {
+        return mApkItems.size();
+    }
+
+    @Override public ApkItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.apk_item, parent, false);
         return new ApkItemViewHolder(view, mActivity, this::removeApkItem);
     }
@@ -53,6 +61,6 @@ public class StoreAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
     }
 
     @Override public int getItemCount() {
-        return mApkItems.size();
+        return 0;
     }
 }

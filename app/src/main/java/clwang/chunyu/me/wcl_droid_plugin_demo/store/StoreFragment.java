@@ -1,9 +1,12 @@
 package clwang.chunyu.me.wcl_droid_plugin_demo.store;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,19 +15,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.morgoo.droidplugin.pm.PluginManager;
+
 import java.io.File;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
 import clwang.chunyu.me.wcl_droid_plugin_demo.R;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
- * 本地Apk的页面
- * <p/>
+ * 安装Apk的页面
+ * <p>
  * Created by wangchenlong on 16/1/8.
  */
-public class StoreApkFragment extends Fragment {
+public class StoreFragment extends Fragment {
 
     @Bind(R.id.list_rv_recycler) RecyclerView mRvRecycler;
 
@@ -43,26 +52,28 @@ public class StoreApkFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRvRecycler.setLayoutManager(llm);
 
-        mStoreAdapter = new StoreAdapter();
+        mStoreAdapter = new StoreAdapter(getActivity());
         mRvRecycler.setAdapter(mStoreAdapter);
-        startLoad();
+
+        // 异步加载, 防止Apk过多, 影响速度
+        Observable.just(getApkFromDownload())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mStoreAdapter::setApkItems);
     }
 
-    // 开始加载
-    private void startLoad() {
-        new Thread("ApkScanner") {
-            @Override
-            public void run() {
-                File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                PackageManager pm = getActivity().getPackageManager();
-                for (File apk : file.listFiles()) {
-                    if (apk.exists() && apk.getPath().toLowerCase().endsWith(".apk")) {
-                        final PackageInfo info = pm.getPackageArchiveInfo(apk.getPath(), 0);
-                        mStoreAdapter.addApkItems(new ApkItem(getActivity(), info, apk.getPath()));
-                    }
-                }
+    // 从下载文件夹获取Apk
+    private ArrayList<ApkItem> getApkFromDownload() {
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        PackageManager pm = getActivity().getPackageManager();
+        ArrayList<ApkItem> apkItems = new ArrayList<>();
+        for (File apk : file.listFiles()) {
+            if (apk.exists() && apk.getPath().toLowerCase().endsWith(".apk")) {
+                final PackageInfo info = pm.getPackageArchiveInfo(apk.getPath(), 0);
+                apkItems.add(new ApkItem(getActivity(), info, apk.getPath()));
             }
-        }.start();
+        }
+        return apkItems;
     }
 
     @Override
