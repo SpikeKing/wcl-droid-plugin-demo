@@ -1,4 +1,4 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo.modules;
+package clwang.chunyu.me.wcl_droid_plugin_demo.controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,7 +12,7 @@ import com.morgoo.droidplugin.pm.PluginManager;
 
 import java.io.File;
 
-import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
+import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItem;
 
 /**
  * Apk操作, 包含删除\安装\卸载\启动Apk
@@ -38,7 +38,7 @@ public class ApkOperator {
         builder.setTitle("警告");
         builder.setMessage("你确定要删除" + item.title + "么？");
         builder.setNegativeButton("删除", (dialog, which) -> {
-            if (new File(item.apkfile).delete()) {
+            if (new File(item.apkFile).delete()) {
                 mCallback.removeItem(item);
                 Toast.makeText(mActivity, "删除成功", Toast.LENGTH_SHORT).show();
             } else {
@@ -62,18 +62,13 @@ public class ApkOperator {
             Toast.makeText(mActivity, "插件服务初始化成功", Toast.LENGTH_SHORT).show();
         }
 
-        try {
-            PackageInfo info = PluginManager.getInstance().getPackageInfo(item.packageInfo.packageName, 0);
-            if (info != null) {
-                Toast.makeText(mActivity, "已经安装", Toast.LENGTH_SHORT).show();
-                return 0;
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if (isApkInstall(item)) {
+            Toast.makeText(mActivity, "已经安装", Toast.LENGTH_SHORT).show();
+            return 0;
         }
 
         try {
-            int result = PluginManager.getInstance().installPackage(item.apkfile, 0);
+            int result = PluginManager.getInstance().installPackage(item.apkFile, 0);
             boolean isRequestPermission = (result == PluginManager.INSTALL_FAILED_NO_REQUESTEDPERMISSION);
             Toast.makeText(mActivity, isRequestPermission ? "需要权限" : "安装完成", Toast.LENGTH_SHORT).show();
             if (isRequestPermission) {
@@ -85,6 +80,17 @@ public class ApkOperator {
         }
 
         return 0;
+    }
+
+    // Apk是否安装
+    private boolean isApkInstall(ApkItem apkItem) {
+        PackageInfo info = null;
+        try {
+            info = PluginManager.getInstance().getPackageInfo(apkItem.packageInfo.packageName, 0);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return info != null;
     }
 
     // 卸载Apk

@@ -1,4 +1,4 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo.start;
+package clwang.chunyu.me.wcl_droid_plugin_demo.views;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -27,8 +27,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
+import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItem;
 import clwang.chunyu.me.wcl_droid_plugin_demo.R;
+import clwang.chunyu.me.wcl_droid_plugin_demo.controller.ApkListAdapter;
+import clwang.chunyu.me.wcl_droid_plugin_demo.controller.ApkOperator;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -42,7 +44,7 @@ public class StartFragment extends Fragment {
 
     @Bind(R.id.list_rv_recycler) RecyclerView mRvRecycler;
 
-    private StartAdapter mStartAdapter; // 适配器
+    private ApkListAdapter mApkListAdapter; // 适配器
     private InstallApkReceiver mInstallApkReceiver; // Apk安装接收器
 
     // 服务连接
@@ -69,8 +71,8 @@ public class StartFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRvRecycler.setLayoutManager(llm);
 
-        mStartAdapter = new StartAdapter(getActivity());
-        mRvRecycler.setAdapter(mStartAdapter);
+        mApkListAdapter = new ApkListAdapter(getActivity(), ApkOperator.TYPE_START);
+        mRvRecycler.setAdapter(mApkListAdapter);
 
         mInstallApkReceiver = new InstallApkReceiver();
 
@@ -96,7 +98,7 @@ public class StartFragment extends Fragment {
         Observable.just(getApkFromInstall())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mStartAdapter::setApkItems);
+                .subscribe(mApkListAdapter::setApkItems);
     }
 
     // 获取安装中获取Apk
@@ -142,23 +144,23 @@ public class StartFragment extends Fragment {
                     PackageManager pm = getActivity().getPackageManager();
                     String pkg = intent.getData().getAuthority();
                     PackageInfo info = PluginManager.getInstance().getPackageInfo(pkg, 0);
-                    mStartAdapter.addApkItem(new ApkItem(pm, info, info.applicationInfo.publicSourceDir));
+                    mApkListAdapter.addApkItem(new ApkItem(pm, info, info.applicationInfo.publicSourceDir));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (PluginManager.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
                 String pkg = intent.getData().getAuthority();
-                int N = mStartAdapter.getCount();
+                int N = mApkListAdapter.getCount();
                 ApkItem iremovedItem = null;
                 for (int i = 0; i < N; i++) {
-                    ApkItem item = mStartAdapter.getApkItem(i);
+                    ApkItem item = mApkListAdapter.getApkItem(i);
                     if (TextUtils.equals(item.packageInfo.packageName, pkg)) {
                         iremovedItem = item;
                         break;
                     }
                 }
                 if (iremovedItem != null) {
-                    mStartAdapter.removeApkItem(iremovedItem);
+                    mApkListAdapter.removeApkItem(iremovedItem);
                 }
             }
         }

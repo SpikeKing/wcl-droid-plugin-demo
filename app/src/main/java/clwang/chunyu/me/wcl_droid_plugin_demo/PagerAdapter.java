@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import clwang.chunyu.me.wcl_droid_plugin_demo.start.StartFragment;
-import clwang.chunyu.me.wcl_droid_plugin_demo.store.StoreFragment;
+import clwang.chunyu.me.wcl_droid_plugin_demo.views.StartFragment;
+import clwang.chunyu.me.wcl_droid_plugin_demo.views.StoreFragment;
 
 /**
  * ViewPager的适配器

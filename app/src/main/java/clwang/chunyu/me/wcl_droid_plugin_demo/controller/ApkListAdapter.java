@@ -1,4 +1,4 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo.start;
+package clwang.chunyu.me.wcl_droid_plugin_demo.controller;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -8,24 +8,25 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
 import clwang.chunyu.me.wcl_droid_plugin_demo.R;
-import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItemViewHolder;
-import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkOperator;
+import clwang.chunyu.me.wcl_droid_plugin_demo.controller.ApkItemViewHolder;
+import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItem;
 
 /**
  * 启动的适配器
  * <p>
  * Created by wangchenlong on 16/1/13.
  */
-public class StartAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
+public class ApkListAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
 
     private ArrayList<ApkItem> mApkItems;
     private Activity mActivity;
+    private int mType; // 类型
 
-    public StartAdapter(Activity activity) {
+    public ApkListAdapter(Activity activity, int type) {
         mActivity = activity;
         mApkItems = new ArrayList<>();
+        mType = type;
     }
 
     public void setApkItems(ArrayList<ApkItem> apkItems) {
@@ -53,7 +54,7 @@ public class StartAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
 
     @Override public ApkItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.apk_item, parent, false);
-        return new ApkItemViewHolder(mActivity, view, ApkOperator.TYPE_START, this::removeApkItem);
+        return new ApkItemViewHolder(mActivity, view, mType, this::removeApkItem);
     }
 
     @Override public void onBindViewHolder(ApkItemViewHolder holder, int position) {

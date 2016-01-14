@@ -1,4 +1,4 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo.modules;
+package clwang.chunyu.me.wcl_droid_plugin_demo.controller;
 
 import android.app.Activity;
 import android.content.pm.PackageInfo;
@@ -13,8 +13,8 @@ import com.morgoo.droidplugin.pm.PluginManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
 import clwang.chunyu.me.wcl_droid_plugin_demo.R;
+import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItem;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -63,11 +63,7 @@ public class ApkItemViewHolder extends RecyclerView.ViewHolder {
         // 修改文字
         if (mType == ApkOperator.TYPE_STORE) {
             mBUndo.setText("删除");
-            if (isApkInstall(apkItem)) {
-                mBDo.setText("已装");
-            } else {
-                mBDo.setText("安装");
-            }
+            mBDo.setText("安装");
         } else if (mType == ApkOperator.TYPE_START) {
             mBUndo.setText("卸载");
             mBDo.setText("启动");
@@ -75,17 +71,6 @@ public class ApkItemViewHolder extends RecyclerView.ViewHolder {
 
         mBUndo.setOnClickListener(this::onClickEvent);
         mBDo.setOnClickListener(this::onClickEvent);
-    }
-
-    // Apk是否安装
-    private boolean isApkInstall(ApkItem apkItem) {
-        PackageInfo info = null;
-        try {
-            info = PluginManager.getInstance().getPackageInfo(apkItem.packageInfo.packageName, 0);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return info != null;
     }
 
     // 点击事件
@@ -98,7 +83,7 @@ public class ApkItemViewHolder extends RecyclerView.ViewHolder {
                 Observable.just(mApkOperator.installApk(mApkItem))
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::checkInstallResult);
+                        .subscribe();
             }
         } else if (mType == ApkOperator.TYPE_START) {
             if (view.equals(mBUndo)) {
@@ -106,15 +91,6 @@ public class ApkItemViewHolder extends RecyclerView.ViewHolder {
             } else if (view.equals(mBDo)) {
                 mApkOperator.openApk(mApkItem);
             }
-        }
-    }
-
-    // 检查安装状态
-    private void checkInstallResult(int i) {
-        if (i == -1) {
-            mBDo.setText("安装");
-        } else if (i == 0) {
-            mBDo.setText("已装");
         }
     }
 }

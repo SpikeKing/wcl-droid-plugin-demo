@@ -1,4 +1,4 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo.store;
+package clwang.chunyu.me.wcl_droid_plugin_demo.views;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
@@ -22,8 +22,10 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
 import clwang.chunyu.me.wcl_droid_plugin_demo.R;
+import clwang.chunyu.me.wcl_droid_plugin_demo.controller.ApkListAdapter;
+import clwang.chunyu.me.wcl_droid_plugin_demo.controller.ApkOperator;
+import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItem;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -37,7 +39,7 @@ public class StoreFragment extends Fragment {
 
     @Bind(R.id.list_rv_recycler) RecyclerView mRvRecycler;
 
-    private StoreAdapter mStoreAdapter; // 适配器
+    private ApkListAdapter mStoreAdapter; // 适配器
 
     // 服务连接
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -63,7 +65,7 @@ public class StoreFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRvRecycler.setLayoutManager(llm);
 
-        mStoreAdapter = new StoreAdapter(getActivity());
+        mStoreAdapter = new ApkListAdapter(getActivity(), ApkOperator.TYPE_STORE);
         mRvRecycler.setAdapter(mStoreAdapter);
 
         if (PluginManager.getInstance().isConnected()) {
@@ -84,13 +86,13 @@ public class StoreFragment extends Fragment {
 
     // 从下载文件夹获取Apk
     private ArrayList<ApkItem> getApkFromDownload() {
-        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         PackageManager pm = getActivity().getPackageManager();
         ArrayList<ApkItem> apkItems = new ArrayList<>();
-        for (File apk : file.listFiles()) {
-            if (apk.exists() && apk.getPath().toLowerCase().endsWith(".apk")) {
-                final PackageInfo info = pm.getPackageArchiveInfo(apk.getPath(), 0);
-                apkItems.add(new ApkItem(getActivity(), info, apk.getPath()));
+        for (File file : files.listFiles()) {
+            if (file.exists() && file.getPath().toLowerCase().endsWith(".apk")) {
+                final PackageInfo info = pm.getPackageArchiveInfo(file.getPath(), 0);
+                apkItems.add(new ApkItem(pm, info, file.getPath()));
             }
         }
         return apkItems;
