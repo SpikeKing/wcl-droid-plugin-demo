@@ -9,7 +9,7 @@ import com.morgoo.droidplugin.PluginHelper;
  * 应用
  * Created by wangchenlong on 16/1/7.
  */
-public class DemoApplication extends Application {
+public class DPApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

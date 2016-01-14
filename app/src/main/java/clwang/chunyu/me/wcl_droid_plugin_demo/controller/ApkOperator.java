@@ -52,34 +52,30 @@ public class ApkOperator {
     /**
      * 安装Apk, 耗时较长, 需要使用异步线程
      *
-     * @param item Apk项目
-     * @return 0, 已经安装; -1, 安装失败.
+     * @param item Apk项
+     * @return [0:成功, 1:已安装, -1:连接失败, -2:权限不足, -3:安装失败]
      */
-    public int installApk(final ApkItem item) {
+    public String installApk(final ApkItem item) {
         if (!PluginManager.getInstance().isConnected()) {
-            Toast.makeText(mActivity, "插件服务初始化失败", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(mActivity, "插件服务初始化成功", Toast.LENGTH_SHORT).show();
+            return "连接失败"; // 连接失败
         }
 
         if (isApkInstall(item)) {
-            Toast.makeText(mActivity, "已经安装", Toast.LENGTH_SHORT).show();
-            return 0;
+            return "已安装"; // 已安装
         }
 
         try {
             int result = PluginManager.getInstance().installPackage(item.apkFile, 0);
             boolean isRequestPermission = (result == PluginManager.INSTALL_FAILED_NO_REQUESTEDPERMISSION);
-            Toast.makeText(mActivity, isRequestPermission ? "需要权限" : "安装完成", Toast.LENGTH_SHORT).show();
             if (isRequestPermission) {
-                return -1;
+                return "权限不足";
             }
         } catch (RemoteException e) {
             e.printStackTrace();
-            return -1;
+            return "安装失败";
         }
 
-        return 0;
+        return "成功";
     }
 
     // Apk是否安装

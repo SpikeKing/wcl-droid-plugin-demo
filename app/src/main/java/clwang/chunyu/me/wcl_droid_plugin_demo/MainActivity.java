@@ -10,8 +10,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "DEBUG-WCL: " + MainActivity.class.getSimpleName();
-
     @Bind(R.id.main_tl_tabs) TabLayout mTlTabs;
     @Bind(R.id.main_vp_container) ViewPager mVpContainer;
 
