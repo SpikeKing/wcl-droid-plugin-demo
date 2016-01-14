@@ -48,7 +48,7 @@ public class StartFragment extends Fragment {
     private InstallApkReceiver mInstallApkReceiver; // Apk安装接收器
 
     // 服务连接
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override public void onServiceConnected(ComponentName name, IBinder service) {
             loadApks();
         }
@@ -110,6 +110,7 @@ public class StartFragment extends Fragment {
                 return apkItems;
             }
             final PackageManager pm = getActivity().getPackageManager();
+            // noinspection all
             for (final PackageInfo info : infos) {
                 apkItems.add(new ApkItem(pm, info, info.applicationInfo.publicSourceDir));
             }
@@ -125,11 +126,11 @@ public class StartFragment extends Fragment {
 
         // 注册监听
         public void registerReceiver(Context context) {
-            IntentFilter f = new IntentFilter();
-            f.addAction(PluginManager.ACTION_PACKAGE_ADDED);
-            f.addAction(PluginManager.ACTION_PACKAGE_REMOVED);
-            f.addDataScheme("package");
-            context.registerReceiver(this, f);
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(PluginManager.ACTION_PACKAGE_ADDED);
+            filter.addAction(PluginManager.ACTION_PACKAGE_REMOVED);
+            filter.addDataScheme("package");
+            context.registerReceiver(this, filter);
         }
 
         // 关闭监听
@@ -139,6 +140,7 @@ public class StartFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            // 监听添加和删除事件
             if (PluginManager.ACTION_PACKAGE_ADDED.equals(intent.getAction())) {
                 try {
                     PackageManager pm = getActivity().getPackageManager();
@@ -150,17 +152,17 @@ public class StartFragment extends Fragment {
                 }
             } else if (PluginManager.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
                 String pkg = intent.getData().getAuthority();
-                int N = mApkListAdapter.getCount();
-                ApkItem iremovedItem = null;
-                for (int i = 0; i < N; i++) {
+                int num = mApkListAdapter.getCount();
+                ApkItem removedItem = null;
+                for (int i = 0; i < num; i++) {
                     ApkItem item = mApkListAdapter.getApkItem(i);
                     if (TextUtils.equals(item.packageInfo.packageName, pkg)) {
-                        iremovedItem = item;
+                        removedItem = item;
                         break;
                     }
                 }
-                if (iremovedItem != null) {
-                    mApkListAdapter.removeApkItem(iremovedItem);
+                if (removedItem != null) {
+                    mApkListAdapter.removeApkItem(removedItem);
                 }
             }
         }
