@@ -16,7 +16,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     private static final String[] TITLES = {
             "已安装",
-            "已安装",
             "未安装"
     };
 
@@ -27,8 +26,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override public Fragment getItem(int position) {
         if (position == 0) {
             return new StartFragment(); // 已安装页
-        } else if (position == 1) {
-            return new InstalledFragment();
         } else {
             return new StoreFragment(); // 想要安装页
         }

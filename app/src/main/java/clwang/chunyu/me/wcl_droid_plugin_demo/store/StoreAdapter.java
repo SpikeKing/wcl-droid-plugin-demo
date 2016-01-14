@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
 import clwang.chunyu.me.wcl_droid_plugin_demo.R;
 import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkItemViewHolder;
+import clwang.chunyu.me.wcl_droid_plugin_demo.modules.ApkOperator;
 
 /**
  * 本地Apk的适配器
@@ -45,7 +46,7 @@ public class StoreAdapter extends RecyclerView.Adapter<ApkItemViewHolder> {
     @Override
     public ApkItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.apk_item, parent, false);
-        return new ApkItemViewHolder(view, mActivity, this::removeApkItem);
+        return new ApkItemViewHolder(mActivity, view, ApkOperator.TYPE_STORE, this::removeApkItem);
     }
 
     @Override public void onBindViewHolder(ApkItemViewHolder holder, int position) {

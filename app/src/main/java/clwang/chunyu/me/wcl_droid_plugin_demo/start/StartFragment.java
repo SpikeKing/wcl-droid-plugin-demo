@@ -118,8 +118,10 @@ public class StartFragment extends Fragment {
         return apkItems;
     }
 
+    // 安装Apk接收器
     private class InstallApkReceiver extends BroadcastReceiver {
 
+        // 注册监听
         public void registerReceiver(Context context) {
             IntentFilter f = new IntentFilter();
             f.addAction(PluginManager.ACTION_PACKAGE_ADDED);
@@ -128,6 +130,7 @@ public class StartFragment extends Fragment {
             context.registerReceiver(this, f);
         }
 
+        // 关闭监听
         public void unregisterReceiver(Context context) {
             context.unregisterReceiver(this);
         }

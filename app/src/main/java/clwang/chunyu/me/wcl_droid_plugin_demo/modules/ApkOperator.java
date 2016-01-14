@@ -15,14 +15,17 @@ import java.io.File;
 import clwang.chunyu.me.wcl_droid_plugin_demo.ApkItem;
 
 /**
- * Apk操作
+ * Apk操作, 包含删除\安装\卸载\启动Apk
  * <p>
  * Created by wangchenlong on 16/1/13.
  */
 public class ApkOperator {
 
-    private Activity mActivity;
-    private RemoveCallback mCallback;
+    public static final int TYPE_STORE = 0; // 存储Apk
+    public static final int TYPE_START = 1; // 启动Apk
+
+    private Activity mActivity; // 绑定Dialog
+    private RemoveCallback mCallback; // 删除Item的回调
 
     public ApkOperator(Activity activity, RemoveCallback callback) {
         mActivity = activity;
@@ -77,8 +80,8 @@ public class ApkOperator {
     // 卸载Apk
     public void uninstallApk(final ApkItem item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle("警告，你确定要卸载么？");
-        builder.setMessage("警告，你确定要删除" + item.title + "么？");
+        builder.setTitle("警告");
+        builder.setMessage("警告，你确定要卸载" + item.title + "么？");
         builder.setNegativeButton("卸载", (dialog, which) -> {
             if (!PluginManager.getInstance().isConnected()) {
                 Toast.makeText(mActivity, "服务未连接", Toast.LENGTH_SHORT).show();
@@ -104,7 +107,7 @@ public class ApkOperator {
         mActivity.startActivity(intent);
     }
 
-
+    // 删除Item回调, Adapter调用删除Item
     public interface RemoveCallback {
         void removeItem(ApkItem apkItem);
     }

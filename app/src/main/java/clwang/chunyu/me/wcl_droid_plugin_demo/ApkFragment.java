@@ -57,7 +57,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                 TextView version = (TextView) convertView.findViewById(R.id.apk_item_tv_version);
                 version.setText(String.format("%s(%s)", item.versionName, item.versionCode));
 
-                TextView btn3 = (TextView) convertView.findViewById(R.id.apk_item_b_uninstall);
+                TextView btn3 = (TextView) convertView.findViewById(R.id.apk_item_b_undo);
                 btn3.setText("删除");
                 btn3.setOnClickListener(new OnClickListener() {
 
@@ -66,7 +66,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                         onListItemClick(getListView(), view, position, getItemId(position));
                     }
                 });
-                TextView btn = (TextView) convertView.findViewById(R.id.apk_item_b_install);
+                TextView btn = (TextView) convertView.findViewById(R.id.apk_item_b_do);
                 try {
                     if (item.installing) {
                         btn.setText("安装中ing");
@@ -199,7 +199,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         final ApkItem item = adapter.getItem(position);
-        if (v.getId() == R.id.apk_item_b_install) {
+        if (v.getId() == R.id.apk_item_b_do) {
             if (item.installing) {
                 return;
             }
@@ -227,7 +227,7 @@ public class ApkFragment extends ListFragment implements ServiceConnection {
                 }
                 adapter.remove(item);
             }
-        } else if (v.getId() == R.id.apk_item_b_uninstall) {
+        } else if (v.getId() == R.id.apk_item_b_undo) {
             doUninstall(item);
         }
     }

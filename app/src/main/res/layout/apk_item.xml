@@ -42,7 +42,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/apk_item_b_install"
+        android:id="@+id/apk_item_b_do"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -50,7 +50,7 @@
         tools:text="安装"/>
 
     <Button
-        android:id="@+id/apk_item_b_uninstall"
+        android:id="@+id/apk_item_b_undo"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
