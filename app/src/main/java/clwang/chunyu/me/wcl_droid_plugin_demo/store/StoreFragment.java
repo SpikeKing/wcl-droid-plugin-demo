@@ -39,6 +39,17 @@ public class StoreFragment extends Fragment {
 
     private StoreAdapter mStoreAdapter; // 适配器
 
+    // 服务连接
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override public void onServiceConnected(ComponentName name, IBinder service) {
+            loadApks();
+        }
+
+        @Override public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
@@ -55,6 +66,15 @@ public class StoreFragment extends Fragment {
         mStoreAdapter = new StoreAdapter(getActivity());
         mRvRecycler.setAdapter(mStoreAdapter);
 
+        if (PluginManager.getInstance().isConnected()) {
+            loadApks();
+        } else {
+            PluginManager.getInstance().addServiceConnection(mServiceConnection);
+        }
+    }
+
+    // 加载Apk
+    private void loadApks() {
         // 异步加载, 防止Apk过多, 影响速度
         Observable.just(getApkFromDownload())
                 .subscribeOn(Schedulers.newThread())
@@ -80,5 +100,6 @@ public class StoreFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        PluginManager.getInstance().removeServiceConnection(mServiceConnection);
     }
 }

@@ -24,7 +24,7 @@ public class ApkOperator {
     public static final int TYPE_STORE = 0; // 存储Apk
     public static final int TYPE_START = 1; // 启动Apk
 
-    private Activity mActivity; // 绑定Dialog
+    private Activity mActivity;       // 绑定Dialog
     private RemoveCallback mCallback; // 删除Item的回调
 
     public ApkOperator(Activity activity, RemoveCallback callback) {
@@ -49,9 +49,13 @@ public class ApkOperator {
         builder.show();
     }
 
-
-    // 安装Apk
-    public void installApk(final ApkItem item) {
+    /**
+     * 安装Apk, 耗时较长, 需要使用异步线程
+     *
+     * @param item Apk项目
+     * @return 0, 已经安装; -1, 安装失败.
+     */
+    public int installApk(final ApkItem item) {
         if (!PluginManager.getInstance().isConnected()) {
             Toast.makeText(mActivity, "插件服务初始化失败", Toast.LENGTH_SHORT).show();
         } else {
@@ -62,7 +66,7 @@ public class ApkOperator {
             PackageInfo info = PluginManager.getInstance().getPackageInfo(item.packageInfo.packageName, 0);
             if (info != null) {
                 Toast.makeText(mActivity, "已经安装", Toast.LENGTH_SHORT).show();
-                return;
+                return 0;
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -72,9 +76,15 @@ public class ApkOperator {
             int result = PluginManager.getInstance().installPackage(item.apkfile, 0);
             boolean isRequestPermission = (result == PluginManager.INSTALL_FAILED_NO_REQUESTEDPERMISSION);
             Toast.makeText(mActivity, isRequestPermission ? "需要权限" : "安装完成", Toast.LENGTH_SHORT).show();
+            if (isRequestPermission) {
+                return -1;
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
+            return -1;
         }
+
+        return 0;
     }
 
     // 卸载Apk
