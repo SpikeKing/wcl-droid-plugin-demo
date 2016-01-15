@@ -1,4 +1,4 @@
-package clwang.chunyu.me.wcl_droid_plugin_demo;
+package clwang.chunyu.me.wcl_droid_plugin_demo.controller;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

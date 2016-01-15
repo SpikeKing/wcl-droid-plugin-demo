@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">wcl-droid-plugin-demo</string>
+    <string name="main_goto_plugin">跳转插件</string>
 </resources>

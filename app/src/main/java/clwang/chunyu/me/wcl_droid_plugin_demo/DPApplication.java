@@ -13,7 +13,7 @@ public class DPApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //这里必须在super.onCreate方法之后，顺序不能变
+        // 这里必须在super.onCreate方法之后，顺序不能变
         PluginHelper.getInstance().applicationOnCreate(getBaseContext());
     }
 
