@@ -31,7 +31,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * 安装Apk的页面
+ * 安装Apk的页面, 使用RecyclerView.
  * <p>
  * Created by wangchenlong on 16/1/8.
  */

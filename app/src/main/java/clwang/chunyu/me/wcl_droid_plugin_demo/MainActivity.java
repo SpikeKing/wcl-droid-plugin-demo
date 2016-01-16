@@ -16,7 +16,10 @@ import clwang.chunyu.me.wcl_droid_plugin_demo.controller.PagerAdapter;
 import clwang.chunyu.me.wcl_droid_plugin_demo.utils.PluginConsts;
 
 /**
- * 主页面, 使用ViewPager
+ * 主页面, 使用TabLayout+ViewPager.
+ * 子页面, 使用RecyclerView.
+ *
+ * @author wangchenlong
  */
 public class MainActivity extends AppCompatActivity {
 
