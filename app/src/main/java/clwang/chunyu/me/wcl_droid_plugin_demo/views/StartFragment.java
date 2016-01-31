@@ -101,7 +101,7 @@ public class StartFragment extends Fragment {
                 .subscribe(mApkListAdapter::setApkItems);
     }
 
-    // 获取安装中获取Apk
+    // 在安装中获取Apk
     private ArrayList<ApkItem> getApkFromInstall() {
         ArrayList<ApkItem> apkItems = new ArrayList<>();
         try {
